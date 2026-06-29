@@ -1,0 +1,26 @@
+<!-- templates/lista.html -->
+{% extends "base.html" %}
+
+{% block conteudo %}
+<div class="grade">
+  {% for filme in filmes %}
+  <article class="card">
+    <h2>{{ filme.titulo }}</h2>
+    <p class="meta">{{ filme.diretor }} · {{ filme.ano }}</p>
+    <p class="genero">{{ filme.genero.nome }}</p>
+    <p class="nota">⭐ {{ filme.nota }}</p>
+    <p class="status {{ 'assistido' if filme.assistido else 'nao-assistido' }}">
+      {{ '✅ Assistido' if filme.assistido else '⏳ Não assistido' }}
+    </p>
+    <div class="acoes">
+      <a class="btn" href="/filmes/{{ filme.id }}/editar">Editar</a>
+      <form action="/filmes/{{ filme.id }}/excluir" method="post">
+        <button class="btn btn-perigo" type="submit">Excluir</button>
+      </form>
+    </div>
+  </article>
+  {% else %}
+  <p>Nenhum filme cadastrado ainda.</p>
+  {% endfor %}
+</div>
+{% endblock %}

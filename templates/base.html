@@ -1,0 +1,22 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titulo %}Catálogo de Filmes{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topo">
+    <h1>🎬 Catálogo de Filmes</h1>
+    <nav>
+      <a href="/filmes">Início</a>
+      <a href="/filmes/novo">+ Novo filme</a>
+    </nav>
+  </header>
+  <main class="container">
+    {% block conteudo %}{% endblock %}   <!-- as outras páginas entram aqui -->
+  </main>
+</body>
+</html>
