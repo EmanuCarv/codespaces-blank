@@ -1,35 +1,66 @@
-<!-- templates/form.html -->
 {% extends "base.html" %}
 
 {% block conteudo %}
 <form class="formulario" method="post"
-      action="{% if filme %}/filmes/{{ filme.id }}/editar{% else %}/filmes{% endif %}">
+      action="{% if livro %}/livros/{{ livro.id }}/editar{% else %}/livros{% endif %}">
+
   <label>Título
-    <input type="text" name="titulo" value="{{ filme.titulo if filme else '' }}" required>
+    <input
+      type="text"
+      name="titulo"
+      value="{{ livro.titulo if livro else '' }}"
+      required>
   </label>
-  <label>Diretor
-    <input type="text" name="diretor" value="{{ filme.diretor if filme else '' }}" required>
+
+  <label>Autor
+    <input
+      type="text"
+      name="autor"
+      value="{{ livro.autor if livro else '' }}"
+      required>
   </label>
+
   <label>Ano
-    <input type="number" name="ano" value="{{ filme.ano if filme else '' }}" required>
+    <input
+      type="number"
+      name="ano"
+      value="{{ livro.ano if livro else '' }}"
+      required>
   </label>
-  <label>Gênero
-    <select name="genero_id" required>
-        {% for g in generos %}
-        <option value="{{ g.id }}"
-        {% if filme and filme.genero_id == g.id %}selected{% endif %}>
-        {{ g.nome }}
-        </option>
-        {% endfor %}
+
+  <label>Categoria
+    <select name="categoria_id" required>
+      {% for c in categorias %}
+      <option
+        value="{{ c.id }}"
+        {% if livro and livro.categoria_id == c.id %}selected{% endif %}>
+        {{ c.nome }}
+      </option>
+      {% endfor %}
     </select>
-   </label>
+  </label>
+
   <label>Nota
-    <input type="number" step="0.1" name="nota" value="{{ filme.nota if filme else 0 }}">
+    <input
+      type="number"
+      step="0.1"
+      min="0"
+      max="10"
+      name="nota"
+      value="{{ livro.nota if livro else 0 }}">
   </label>
+
   <label class="checkbox">
-    <input type="checkbox" name="assistido" {% if filme and filme.assistido %}checked{% endif %}>
-    Assistido
+    <input
+      type="checkbox"
+      name="lido"
+      {% if livro and livro.lido %}checked{% endif %}>
+    Lido
   </label>
-  <button class="btn" type="submit">Salvar</button>
+
+  <button class="btn" type="submit">
+    Salvar
+  </button>
+
 </form>
 {% endblock %}

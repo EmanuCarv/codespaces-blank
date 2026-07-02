@@ -1,4 +1,3 @@
-# main.py
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, Form, Request
@@ -11,74 +10,145 @@ from sqlalchemy.orm import Session
 import models
 from database import Base, engine, get_session
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    Base.metadata.create_all(bind=engine)   # cria as tabelas no Supabase
+    Base.metadata.create_all(bind=engine)
     yield
 
+
 app = FastAPI(lifespan=lifespan)
-app.mount('/static', StaticFiles(directory='static'), name='static')
-templates = Jinja2Templates(directory='templates')
 
-@app.get('/')                               # raiz → redireciona para a lista
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+
+
+# Página inicial
+@app.get("/")
 def home():
-    return RedirectResponse(url='/filmes')
+    return RedirectResponse(url="/livros")
 
-# main.py (continuação)
-# READ — lista todos os filmes
-@app.get('/filmes')
+
+# LISTAR LIVROS
+@app.get("/livros")
 def listar(request: Request, session: Session = Depends(get_session)):
-    filmes = session.scalars(select(models.Filme)).all()
-    return templates.TemplateResponse(request, 'lista.html', {'filmes': filmes})
+    livros = session.scalars(select(models.Livro)).all()
 
-# CREATE — formulário vazio
-# main.py (trechos ajustados)
-@app.get('/filmes/novo')
+    return templates.TemplateResponse(
+        request,
+        "lista.html",
+        {"livros": livros},
+    )
+
+
+# FORMULÁRIO NOVO LIVRO
+@app.get("/livros/novo")
 def form_novo(request: Request, session: Session = Depends(get_session)):
-    generos = session.scalars(select(models.Genero)).all()
-    return templates.TemplateResponse(
-        request, 'form.html', {'filme': None, 'generos': generos})
+    categorias = session.scalars(select(models.Categoria)).all()
 
-@app.post('/filmes')
+    return templates.TemplateResponse(
+        request,
+        "form.html",
+        {
+            "livro": None,
+            "categorias": categorias,
+        },
+    )
+
+
+# CRIAR LIVRO
+@app.post("/livros")
 def criar(
-    titulo: str = Form(...), diretor: str = Form(...), ano: int = Form(...),
-    genero_id: int = Form(...),            # agora recebe o id do gênero
-    nota: float = Form(0), assistido: bool = Form(False),
+    titulo: str = Form(...),
+    autor: str = Form(...),
+    ano: int = Form(...),
+    categoria_id: int = Form(...),
+    nota: float = Form(0),
+    lido: bool = Form(False),
     session: Session = Depends(get_session),
 ):
-    filme = models.Filme(titulo=titulo, diretor=diretor, ano=ano,
-                         genero_id=genero_id, nota=nota, assistido=assistido)
-    session.add(filme); session.commit()
-    return RedirectResponse(url='/filmes', status_code=303)
+    livro = models.Livro(
+        titulo=titulo,
+        autor=autor,
+        ano=ano,
+        categoria_id=categoria_id,
+        nota=nota,
+        lido=lido,
+    )
 
-# main.py (continuação)
-# UPDATE — formulário preenchido
-@app.get('/filmes/{filme_id}/editar')
-def form_editar(filme_id: int, request: Request, session: Session = Depends(get_session)):
-    filme = session.get(models.Filme, filme_id)
-    generos = session.scalars(select(models.Genero)).all()   # lista p/ o <select>
+    session.add(livro)
+    session.commit()
+
+    return RedirectResponse(
+        url="/livros",
+        status_code=303,
+    )
+
+
+# FORMULÁRIO EDITAR
+@app.get("/livros/{livro_id}/editar")
+def form_editar(
+    livro_id: int,
+    request: Request,
+    session: Session = Depends(get_session),
+):
+    livro = session.get(models.Livro, livro_id)
+
+    categorias = session.scalars(
+        select(models.Categoria)
+    ).all()
+
     return templates.TemplateResponse(
-        request, 'form.html', {'filme': filme, 'generos': generos})
+        request,
+        "form.html",
+        {
+            "livro": livro,
+            "categorias": categorias,
+        },
+    )
 
-@app.post('/filmes/{filme_id}/editar')
+
+# ATUALIZAR
+@app.post("/livros/{livro_id}/editar")
 def atualizar(
-    filme_id: int,
-    titulo: str = Form(...), diretor: str = Form(...), ano: int = Form(...),
-    genero_id: int = Form(...),            # agora recebe o id do gênero
-    nota: float = Form(0), assistido: bool = Form(False),
+    livro_id: int,
+    titulo: str = Form(...),
+    autor: str = Form(...),
+    ano: int = Form(...),
+    categoria_id: int = Form(...),
+    nota: float = Form(0),
+    lido: bool = Form(False),
     session: Session = Depends(get_session),
 ):
-    filme = session.get(models.Filme, filme_id)
-    filme.titulo, filme.diretor, filme.ano = titulo, diretor, ano
-    filme.genero_id, filme.nota, filme.assistido = genero_id, nota, assistido
+    livro = session.get(models.Livro, livro_id)
+
+    livro.titulo = titulo
+    livro.autor = autor
+    livro.ano = ano
+    livro.categoria_id = categoria_id
+    livro.nota = nota
+    livro.lido = lido
+
     session.commit()
-    return RedirectResponse(url='/filmes', status_code=303)
+
+    return RedirectResponse(
+        url="/livros",
+        status_code=303,
+    )
 
 
-# DELETE — remove do banco
-@app.post('/filmes/{filme_id}/excluir')
-def excluir(filme_id: int, session: Session = Depends(get_session)):
-    filme = session.get(models.Filme, filme_id)
-    session.delete(filme)
+# EXCLUIR
+@app.post("/livros/{livro_id}/excluir")
+def excluir(
+    livro_id: int,
+    session: Session = Depends(get_session),
+):
+    livro = session.get(models.Livro, livro_id)
+
+    session.delete(livro)
     session.commit()
-    return RedirectResponse(url='/filmes', status_code=303)
+
+    return RedirectResponse(
+        url="/livros",
+        status_code=303,
+    )
