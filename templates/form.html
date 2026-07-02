@@ -36,6 +36,14 @@
       required>
   </label>
 
+  <label>Imagem (URL)
+  <input
+      type="text"
+      name="imagem"
+      placeholder="https://..."
+      value="{{ livro.imagem if livro else '' }}">
+</label>
+
   <label>Categoria
     <select name="categoria_id" required>
       {% for c in categorias %}
