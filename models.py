@@ -18,6 +18,7 @@ class Livro(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     titulo: Mapped[str]
     autor: Mapped[str]
+    editora: Mapped[str]
     ano: Mapped[int]
     nota: Mapped[float] = mapped_column(default=0)
     lido: Mapped[bool] = mapped_column(default=False)

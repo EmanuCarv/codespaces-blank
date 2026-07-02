@@ -61,6 +61,7 @@ def form_novo(request: Request, session: Session = Depends(get_session)):
 def criar(
     titulo: str = Form(...),
     autor: str = Form(...),
+    editora: str = Form(...),
     ano: int = Form(...),
     categoria_id: int = Form(...),
     nota: float = Form(0),
@@ -70,6 +71,7 @@ def criar(
     livro = models.Livro(
         titulo=titulo,
         autor=autor,
+        editora=editora,
         ano=ano,
         categoria_id=categoria_id,
         nota=nota,
@@ -114,6 +116,7 @@ def atualizar(
     livro_id: int,
     titulo: str = Form(...),
     autor: str = Form(...),
+    editora: str = Form(...),
     ano: int = Form(...),
     categoria_id: int = Form(...),
     nota: float = Form(0),
@@ -124,6 +127,7 @@ def atualizar(
 
     livro.titulo = titulo
     livro.autor = autor
+    livro.editora = editora
     livro.ano = ano
     livro.categoria_id = categoria_id
     livro.nota = nota
