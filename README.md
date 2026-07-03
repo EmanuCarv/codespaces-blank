@@ -126,3 +126,9 @@ Sistema web de gerenciamento de livros desenvolvido com **FastAPI**, **SQLAlchem
 | GET | `/livros/{id}/editar` | Exibe o formulário de edição |
 | POST | `/livros/{id}/editar` | Atualiza um livro |
 | POST | `/livros/{id}/excluir` | Exclui um livro |
+
+
+<img width="1353" height="633" alt="image" src="https://github.com/user-attachments/assets/7f2d5a84-b0ff-481e-a105-f723a52e83df" />
+<img width="1349" height="629" alt="image" src="https://github.com/user-attachments/assets/3afa4bcb-b1f6-40f9-b308-3678fc47d6f9" />
+
+
