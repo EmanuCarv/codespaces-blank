@@ -1,22 +1,77 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block titulo %}Biblioteca{% endblock %}</title>
-  <link rel="stylesheet" href="/static/style.css?v=3">
-</head>
-<body>
-  <header class="topo">
-    <h1>📚 Biblioteca</h1>
-    <nav>
-      <a href="/livros">Início</a>
-      <a href="/livros/novo">+ Novo livro</a>
-    </nav>
-  </header>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Online Library{% endblock %}</title>
 
-  <main class="container">
-    {% block conteudo %}{% endblock %}
-  </main>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<header class="topo">
+
+    <h1>📚 Online Library</h1>
+
+    <nav>
+        <a href="/livros">Início</a>
+        <a href="/livros/novo">Novo Livro</a>
+    </nav>
+
+</header>
+
+<main class="container">
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <img
+                src="https://static.vecteezy.com/ti/vetor-gratis/p1/1312551-conceito-de-biblioteca-e-educacao-online-gratis-vetor.jpg"
+                alt="Logo Biblioteca">
+
+            <span>Online Library</span>
+
+        </div>
+
+        <nav class="menu-lateral">
+
+            <a href="/livros">
+                <i class="fa-solid fa-house"></i>
+                Início
+            </a>
+
+            <a href="/livros/novo">
+                <i class="fa-solid fa-plus"></i>
+                Novo Livro
+            </a>
+
+        </nav>
+
+    </aside>
+
+    <section class="conteudo">
+
+        {% block conteudo %}
+        {% endblock %}
+
+    </section>
+
+</main>
+
+<footer class="footer">
+
+    <p>
+        📚 Biblioteca |
+        Desenvolvido por Hananda Islla,
+        Maria Emanuele e Maresa Nascimento © 2026
+    </p>
+
+</footer>
+
 </body>
 </html>
